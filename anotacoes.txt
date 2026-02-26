@@ -1,0 +1,44 @@
+para clonar um repositório(no terminal):
+git clone (coloque o link do github)
+
+abrir a pasta do repositório:
+File>Open Folder>(Selecione a pasta do repositório)
+
+--watch: para atualizar o servidor, sem matar o terminal
+
+criar um arquivo server.js
+
+Ativar o auto save(file> auto save)
+
+abrir o terminal:
+ctrl "
+
+iniciar o node:
+npm init -y
+
+Dentro do arquivo package.json
+"type":"module",
+
+dentro de scripts:
+"start": "node --watch server.js"
+
+Instalar as dependencias:
+npm i fastify
+
+npm i pg
+
+importar o fastify:
+import Fastify from 'fastify'
+
+const servidor = Fastify();
+
+servidor.get('/usuarios', ()=>{
+    return 'funcionando'
+})
+
+servidor.listen({
+    port: 3000
+})
+
+-------------------------
+localhost: armazenar o ip
