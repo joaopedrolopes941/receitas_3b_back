@@ -42,3 +42,5 @@ servidor.listen({
 
 -------------------------
 localhost: armazenar o ip
+
+para o servidor funcionar precisa usar o npm i eo npm start
