@@ -11,3 +11,17 @@ Content-Type: application/json
     "nome":"João Pedro",
     "senha":"12345"
 }
+
+###
+
+PUT http://localhost:3000/usuarios/1
+Content-Type: application/json
+
+{
+    "nome":"pikachu",
+    "senha":"12345"
+}
+
+###
+
+Delete http://localhost:3000/usuarios/1
