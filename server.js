@@ -24,19 +24,32 @@ servidor.post('/usuarios', async (request, reply) => {
     }
 
     const resultado = await sql.query('insert into usuario (nome, senha) values ($1, $2)', [body.nome, body.senha])
-    return 'USUARIO CADASTRADO'
+    reply.status(201).send({ message: 'USUÁRIO Criado' })
 })
 
 servidor.put('/usuarios/:id', async (request, reply) => {
     const body = request.body
     const id = request.params.id
 
-    if (!id || !body || !body.nome || !body.senha) {
+    if (!body || !body.nome || !body.senha) {
         return reply.status(400).send({message:"nome e senha obrigatórios"})
     }
 
+    else if (!id) {
+        return reply.status(400).send({
+            message:"id obrigatório"
+        })
+    }
+
+    const usuario = await sql.query('SELECT * FROM usuario WHERE id = $1', [id])
+    if (usuario.rows.length === 0){
+        return reply.status(404).send({
+            message:"usuario não encontrado"
+        })
+    }
     const resultado = await sql.query('UPDATE usuario SET nome = $1, senha = $2 WHERE id = $3', [body.nome, body.senha, id])
-    return "USUÁRIO ATUALIZADO"
+
+    reply.status(200).send({ message: 'USUÁRIO ATUALIZADO' })
 })
 
 servidor.delete('/usuarios/:id', async (request, reply) => {
