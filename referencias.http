@@ -9,7 +9,8 @@ Content-Type: application/json
 
 {
     "nome":"João Pedro",
-    "senha":"12345"
+    "senha":"12345",
+    "email":"joao2@example.com"
 }
 
 ###
@@ -19,9 +20,20 @@ Content-Type: application/json
 
 {
     "nome":"pikachu",
-    "senha":"12345"
+    "senha":"12345",
 }
 
 ###
 
+
 Delete http://localhost:3000/usuarios/1
+
+###
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email":"joao.pedro@example.com",
+    "senha":"12345"
+}

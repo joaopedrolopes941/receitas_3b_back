@@ -11,6 +11,22 @@ const sql = new Pool({
 
 const servidor = Fastify();
 
+servidor.post('/login', async (request,reply)=> {
+    const body = request.body
+
+    if(!body || !body.email || !body.senha){
+        return reply.status(400).send({message:"email e senha obrigatórios"})
+    }
+    const resultado = await sql.query('SELECT * FROM usuario WHERE email = $1 AND senha = $2', [body.email, body.senha])
+
+    if (resultado.rows.length === 0){
+    reply.status(401).send({message:"Usuário ou senhas inválidos", login:false})
+    } else if (resultado.rows.length === 1){
+        reply.status(200).send({message:"Login realizado com sucesso", login:true})
+    }
+
+})
+
 servidor.get('/usuarios', async () => {
     const resultado = await sql.query('select * from usuario')
     return resultado.rows
@@ -19,20 +35,21 @@ servidor.get('/usuarios', async () => {
 servidor.post('/usuarios', async (request, reply) => {
     const body = request.body
 
-    if(!body || !body.nome || !body.senha) {
-        return reply.status(400).send({message:"nome e senha obrigatórios"})
+    if(!body || !body.nome || !body.senha || !body.email){ 
+        return reply.status(400).send({message:"nome, senha e email obrigatórios"})
     }
 
-    const resultado = await sql.query('insert into usuario (nome, senha) values ($1, $2)', [body.nome, body.senha])
-    reply.status(201).send({ message: 'USUÁRIO Criado' })
+    const resultado = await sql.query('insert into usuario (nome, senha, email) values ($1, $2, $3)', [body.nome, body.senha, body.email])
+    return reply.status(201).send({ message: 'USUÁRIO CRIADO' })
+
 })
 
 servidor.put('/usuarios/:id', async (request, reply) => {
     const body = request.body
     const id = request.params.id
 
-    if (!body || !body.nome || !body.senha) {
-        return reply.status(400).send({message:"nome e senha obrigatórios"})
+    if (!body || !body.nome || !body.senha || !body.email) {
+        return reply.status(400).send({message:"nome, senha e email obrigatórios"})
     }
 
     else if (!id) {
@@ -47,9 +64,9 @@ servidor.put('/usuarios/:id', async (request, reply) => {
             message:"usuario não encontrado"
         })
     }
-    const resultado = await sql.query('UPDATE usuario SET nome = $1, senha = $2 WHERE id = $3', [body.nome, body.senha, id])
+    const resultado = await sql.query('UPDATE usuario SET nome = $1, senha = $2, email = $4 WHERE id = $3', [body.nome, body.senha, body.email, id])
 
-    reply.status(200).send({ message: 'USUÁRIO ATUALIZADO' })
+    reply.status(201).send({ message: 'USUÁRIO ATUALIZADO' })
 })
 
 servidor.delete('/usuarios/:id', async (request, reply) => {
