@@ -52,3 +52,7 @@ git add .
 git commit -m "mensagem do commit"
 
 git push 
+
+quando entrar em um outro pc copie o sql e cole no pg admin (vá no data base de um query tool e copie o sql e execute o script)
+
+return mata a função
